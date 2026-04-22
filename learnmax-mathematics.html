@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LearnMax · Mathematics</title>
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23120a00'/%3E%3Ctext y='46' x='8' font-size='42' font-family='serif'%3E🔢%3C/text%3E%3C/svg%3E"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+<style>
+/* ═══════════════════════════════════════════════════════
+   LearnMax · Mathematics — Standalone Subject File
+   Same palette & tokens as index.html (amber / blue / void)
+═══════════════════════════════════════════════════════ */
+:root{
+  --void:#070500;--deep:#0d0900;--panel:#110c01;--panel2:#181006;
+  --glass:rgba(217,119,6,.05);--glass2:rgba(217,119,6,.10);--glass3:rgba(251,191,36,.07);
+  --amber:#f59e0b;--amber2:#d97706;--yellow:#fde047;
+  --blue:#38bdf8;--blue2:#0ea5e9;--teal:#2dd4bf;--green:#4ade80;--red:#f87171;
+  --border:rgba(245,158,11,.14);--border2:rgba(245,158,11,.28);--border-b:rgba(56,189,248,.18);
+  --text:#fef3c7;--text2:#d4a96a;--text3:#7c5a2e;--dim:#a07840;--dimmer:#5c3d18;
+  --user-bg:linear-gradient(135deg,#d97706,#f59e0b);--bot-glass:rgba(13,9,0,.92);
+  --glow-a:0 0 16px rgba(245,158,11,.35);--glow-b:0 0 16px rgba(56,189,248,.3);
+  --glow-y:0 0 16px rgba(253,224,71,.3);--glow-lg:0 0 60px rgba(245,158,11,.18),0 0 120px rgba(245,158,11,.07);
+  --r:16px;--font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;--fs:14.5px;
+}
+[data-theme="light"]{
+  --void:#fffbeb;--deep:#fef3c7;--panel:#ffffff;--panel2:#fffdf5;
+  --glass:rgba(180,80,0,.04);--glass2:rgba(180,80,0,.08);
+  --border:rgba(180,80,0,.14);--border2:rgba(180,80,0,.28);--border-b:rgba(14,165,233,.2);
+  --text:#1c0a00;--text2:#7c3a00;--text3:#a05a20;--dim:#6b3a10;--dimmer:#a06030;
+  --bot-glass:rgba(255,253,245,.96);
+  --glow-a:0 2px 12px rgba(180,80,0,.15);--glow-b:0 2px 12px rgba(14,165,233,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--font);font-size:var(--fs)}
+body{background:var(--void);color:var(--text);display:flex;height:100vh;overflow:hidden}
+
+/* bg grid */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(245,158,11,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(56,189,248,.02) 1px,transparent 1px);
+  background-size:56px 56px;animation:gridDrift 25s linear infinite}
+@keyframes gridDrift{0%{background-position:0 0}100%{background-position:56px 56px}}
+body::after{content:'';position:fixed;top:0;left:0;right:0;height:300px;
+  background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(245,158,11,.07) 0%,transparent 100%);
+  pointer-events:none;z-index:0}
+
+#scanline{position:fixed;top:-2px;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(245,158,11,.5),rgba(253,224,71,.6),transparent);
+  z-index:999;pointer-events:none;animation:scan 10s linear infinite;opacity:.35}
+@keyframes scan{0%{top:-2px}100%{top:100vh}}
+
+/* ══ SIDEBAR ════════════════════════════════════════ */
+.sidebar{
+  width:272px;min-width:272px;
+  background:linear-gradient(180deg,var(--panel) 0%,var(--deep) 100%);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:10;position:relative;overflow:hidden;
+}
+.sidebar::before{content:'';position:absolute;top:0;right:0;width:1px;height:100%;
+  background:linear-gradient(180deg,var(--amber),transparent 35%,transparent 65%,var(--blue));opacity:.5}
+.sidebar::after{content:'';position:absolute;top:0;left:0;right:0;height:180px;
+  background:radial-gradient(ellipse 80% 100% at 50% 0%,rgba(245,158,11,.07) 0%,transparent 100%);pointer-events:none}
+
+/* logo */
+.sidebar-header{padding:20px 18px 16px;border-bottom:1px solid var(--border);position:relative}
+.logo{display:flex;align-items:center;gap:11px;
+  font-family:'Syne',sans-serif;font-size:21px;font-weight:800;letter-spacing:-.5px}
+.logo-icon-wrap{width:40px;height:40px;position:relative;flex-shrink:0}
+.logo-ring-svg{position:absolute;inset:0;animation:logoSpin 10s linear infinite}
+@keyframes logoSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.logo-core{position:absolute;inset:7px;background:linear-gradient(135deg,var(--amber),var(--amber2));
+  border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;
+  box-shadow:0 0 18px rgba(245,158,11,.55)}
+.logo-text{color:var(--text)}.logo-text .max{color:var(--amber);text-shadow:0 0 20px rgba(245,158,11,.5)}
+.level-badge{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:3px 9px;
+  border-radius:20px;background:rgba(56,189,248,.1);border:1px solid var(--border-b);
+  font-size:9.5px;color:var(--blue);font-family:var(--mono);letter-spacing:1px}
+.level-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);
+  animation:pulse-dot 2s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+.new-chat-btn{margin:12px 16px 0;padding:10px 16px;
+  background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(253,224,71,.08));
+  border:1px solid var(--border2);border-radius:10px;
+  color:var(--amber);font-weight:700;font-size:13px;
+  cursor:pointer;display:flex;align-items:center;gap:8px;
+  font-family:var(--font);transition:all .2s;position:relative;overflow:hidden}
+.new-chat-btn:hover{border-color:var(--amber);box-shadow:var(--glow-a);transform:translateY(-1px)}
+.new-chat-btn .plus{width:18px;height:18px;border-radius:50%;
+  background:linear-gradient(135deg,var(--amber),var(--amber2));
+  color:#070500;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;flex-shrink:0}
+
+/* ── GRADE SELECTOR ──────────────────────────────── */
+.grade-section{padding:12px 16px 6px}
+.section-title{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--dimmer);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.grade-select{width:100%;padding:8px 11px;border-radius:9px;
+  background:var(--glass2);border:1px solid var(--border2);
+  color:var(--text);font-family:var(--mono);font-size:11.5px;
+  cursor:pointer;outline:none;transition:border-color .2s}
+.grade-select:focus{border-color:rgba(245,158,11,.45);box-shadow:var(--glow-a)}
+.grade-select option{background:var(--panel2)}
+
+/* ── TOPIC TREE ──────────────────────────────────── */
+.topic-scroll{flex:1;overflow-y:auto;padding:0 0 8px}
+.topic-scroll::-webkit-scrollbar{width:3px}
+.topic-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.tree-stage{padding:10px 16px 4px;
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dimmer);display:flex;align-items:center;gap:6px}
+.tree-stage::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.tree-chapter{padding:8px 16px;cursor:pointer;
+  border-left:2px solid transparent;font-size:12px;color:var(--text2);
+  transition:all .15s;position:relative;display:flex;align-items:center;gap:7px}
+.tree-chapter:hover{background:var(--glass);color:var(--text);border-left-color:var(--amber2)}
+.tree-chapter.active{background:var(--glass2);color:var(--amber);
+  border-left-color:var(--amber);font-weight:600}
+.tree-chapter.done{color:var(--green)}
+.tree-chapter .ch-done-mark{font-size:10px;color:var(--green);margin-left:auto}
+.tree-chapter .ch-score-badge{font-size:9px;font-family:var(--mono);margin-left:auto;
+  padding:1px 6px;border-radius:4px;background:var(--glass2)}
+
+.tree-topic{padding:4px 12px 4px 32px;font-size:11px;color:var(--dimmer);
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+.tree-topic::before{content:'›';color:var(--dimmer);font-size:13px}
+.tree-topic:hover{color:var(--text2)}
+.tree-topic.active-t{color:var(--amber);font-weight:500}
+.tree-topic.active-t::before{color:var(--amber)}
+.tree-topic.done-t{color:var(--green)}
+.tree-topic.done-t::before{content:'✓';color:var(--green)}
+
+/* sidebar bottom */
+.sidebar-bottom{margin-top:auto;padding:12px 16px;
+  border-top:1px solid var(--border);display:flex;flex-direction:column;gap:5px}
+.model-badge{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:7px;
+  background:var(--glass2);border:1px solid var(--border);
+  font-size:10px;color:var(--amber);font-family:var(--mono)}
+.settings-btn{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;
+  cursor:pointer;font-size:12px;color:var(--dim);
+  background:none;border:none;width:100%;text-align:left;
+  font-family:var(--font);transition:all .15s}
+.settings-btn:hover{background:var(--glass2);color:var(--text)}
+
+/* ══ MAIN ═══════════════════════════════════════════ */
+.main{flex:1;display:flex;flex-direction:column;z-index:5;position:relative;overflow:hidden}
+
+/* header */
+.chat-header{padding:13px 22px;
+  background:linear-gradient(90deg,var(--panel) 0%,var(--deep) 100%);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:13px;position:relative}
+.chat-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--amber),var(--yellow),var(--blue),transparent);opacity:.35}
+.bot-avatar{width:42px;height:42px;position:relative;flex-shrink:0}
+.bot-avatar-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;
+  background:linear-gradient(var(--panel),var(--panel)) padding-box,
+             linear-gradient(135deg,var(--amber),var(--blue)) border-box;
+  animation:logoSpin 7s linear infinite}
+.bot-avatar-core{position:absolute;inset:6px;border-radius:50%;
+  background:linear-gradient(135deg,var(--amber),var(--amber2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;box-shadow:0 0 18px rgba(245,158,11,.5)}
+.bot-status{position:absolute;bottom:1px;right:1px;width:9px;height:9px;
+  border-radius:50%;background:#22c55e;border:2px solid var(--panel);box-shadow:0 0 8px #22c55e}
+.header-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;letter-spacing:.2px}
+.header-sub{font-size:11px;color:var(--dim)}
+.header-actions{margin-left:auto;display:flex;gap:7px;align-items:center}
+.hud-pill{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;
+  border:1px solid var(--border);background:var(--glass);
+  font-size:9.5px;color:var(--dim);font-family:var(--mono);cursor:default;transition:all .2s}
+.hud-pill .hd{width:5px;height:5px;border-radius:50%;background:var(--amber);box-shadow:var(--glow-a)}
+.hud-pill:hover{border-color:var(--border2);color:var(--amber)}
+.icon-btn{width:34px;height:34px;border-radius:8px;
+  background:var(--glass);border:1px solid var(--border);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--dim);transition:all .15s}
+.icon-btn:hover{background:var(--glass2);color:var(--amber);border-color:var(--border2);box-shadow:var(--glow-a)}
+
+/* mode tabs */
+.mode-tabs{display:flex;gap:4px;padding:8px 20px;
+  background:var(--deep);border-bottom:1px solid var(--border);overflow-x:auto}
+.mode-tabs::-webkit-scrollbar{display:none}
+.mode-tab{padding:6px 14px;border-radius:8px;font-size:11.5px;font-weight:600;
+  cursor:pointer;border:1px solid var(--border);
+  background:transparent;color:var(--dim);font-family:var(--font);
+  transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.mode-tab:hover{border-color:var(--border2);color:var(--amber)}
+.mode-tab.active{background:var(--glass2);border-color:var(--amber);
+  color:var(--amber);box-shadow:var(--glow-a)}
+
+/* ══ PROMPT PANEL (new) ═════════════════════════════ */
+/* sits between mode-tabs and messages when a topic is selected */
+.prompt-panel{
+  background:linear-gradient(90deg,var(--panel) 0%,var(--deep) 100%);
+  border-bottom:1px solid var(--border);
+  padding:10px 20px 12px;
+  display:none; /* shown when topic active */
+}
+.prompt-panel.visible{display:block}
+.prompt-panel-label{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dimmer);font-family:var(--mono);margin-bottom:8px;
+}
+.prompt-chips{display:flex;flex-wrap:wrap;gap:6px}
+.pchip{
+  padding:5px 12px;border-radius:20px;font-size:11.5px;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--amber);cursor:pointer;font-family:var(--font);
+  transition:all .15s;position:relative;overflow:hidden;white-space:nowrap;
+}
+.pchip:hover{border-color:var(--amber);box-shadow:var(--glow-a);transform:translateY(-1px)}
+
+/* ══ MESSAGES ════════════════════════════════════════ */
+.messages-wrap{flex:1;overflow-y:auto;padding:20px 24px;
+  display:flex;flex-direction:column;gap:18px;scroll-behavior:smooth}
+.messages-wrap::-webkit-scrollbar{width:3px}
+.messages-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.msg-row{display:flex;gap:11px;animation:msgIn .35s cubic-bezier(.34,1.56,.64,1) both}
+.msg-row.user{flex-direction:row-reverse}
+@keyframes msgIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+
+.msg-avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:15px;margin-top:2px}
+.msg-avatar.bot{background:linear-gradient(135deg,var(--amber),var(--amber2));
+  box-shadow:0 0 14px rgba(245,158,11,.4)}
+.msg-avatar.user{background:linear-gradient(135deg,var(--blue),var(--blue2));
+  box-shadow:0 0 14px rgba(56,189,248,.4)}
+.msg-content{display:flex;flex-direction:column;gap:4px;max-width:min(72%,720px)}
+.msg-row.user .msg-content{align-items:flex-end}
+
+.msg-bubble{padding:12px 16px;border-radius:var(--r);font-size:var(--fs);
+  line-height:1.7;position:relative;overflow:hidden}
+.msg-row.bot .msg-bubble{
+  background:var(--bot-glass);border:1px solid var(--border);
+  border-top-left-radius:4px;
+  backdrop-filter:blur(12px);
+}
+.msg-row.bot .msg-bubble::before{
+  content:'';position:absolute;top:0;left:0;width:2px;height:100%;
+  background:linear-gradient(180deg,var(--amber),transparent 35%,var(--blue) 80%,transparent);opacity:.5}
+.msg-row.user .msg-bubble{
+  background:var(--user-bg);color:#1c0a00;border-top-right-radius:4px}
+.msg-bubble ul{padding-left:18px;margin:6px 0}
+.msg-bubble li{margin:4px 0}
+.msg-bubble code{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.2);
+  border-radius:5px;padding:1px 6px;font-family:var(--mono);font-size:12.5px;color:var(--yellow)}
+.msg-bubble pre{background:rgba(0,0,0,.35);border:1px solid var(--border);
+  border-radius:10px;padding:14px;overflow-x:auto;margin:10px 0}
+.msg-bubble pre code{background:none;border:none;padding:0;font-size:13px}
+.msg-bubble .fun-fact{background:rgba(253,224,71,.06);border:1px solid rgba(253,224,71,.18);
+  border-radius:8px;padding:8px 12px;margin:10px 0;font-size:13px;color:var(--yellow);font-style:italic}
+.msg-bubble .joke-box{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.15);
+  border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13px;color:var(--blue)}
+.msg-bubble .step{display:flex;gap:10px;align-items:flex-start;margin:6px 0;padding:6px;
+  border-radius:6px;background:rgba(245,158,11,.04)}
+.msg-bubble .step-num{min-width:22px;height:22px;border-radius:50%;
+  background:var(--amber);color:#070500;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:1px}
+.msg-time{font-size:10px;color:var(--dimmer);padding:0 4px;font-family:var(--mono)}
+.error-bubble{background:rgba(239,68,68,.09)!important;border-color:rgba(239,68,68,.3)!important;color:#fca5a5}
+.error-bubble::before{background:linear-gradient(180deg,#ef4444,transparent)!important}
+
+.typing-indicator{display:flex;gap:5px;padding:12px 14px;align-items:center}
+.typing-indicator span{width:7px;height:7px;border-radius:50%;background:var(--amber);
+  opacity:.35;animation:bounce 1.4s ease-in-out infinite;box-shadow:0 0 8px var(--amber)}
+.typing-indicator span:nth-child(2){animation-delay:.18s}
+.typing-indicator span:nth-child(3){animation-delay:.36s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-8px);opacity:1}}
+
+.chips-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{padding:5px 11px;border-radius:20px;font-size:11.5px;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--amber);cursor:pointer;font-family:var(--font);transition:all .15s}
+.chip:hover{border-color:var(--amber);box-shadow:var(--glow-a);transform:translateY(-1px)}
+
+/* ══ WELCOME ═════════════════════════════════════════ */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;text-align:center;padding:36px;gap:18px}
+.welcome-orb{position:relative;width:110px;height:110px;margin-bottom:4px}
+.orb-ring1{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(245,158,11,.22);
+  animation:orbPulse 3s ease-in-out infinite}
+.orb-ring2{position:absolute;inset:14px;border-radius:50%;border:1px solid rgba(56,189,248,.2);
+  animation:orbPulse 3s ease-in-out infinite .6s}
+.orb-core{position:absolute;inset:24px;border-radius:50%;
+  background:radial-gradient(circle at 38% 38%,var(--amber),var(--amber2));
+  display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:var(--glow-lg)}
+@keyframes orbPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.07);opacity:1}}
+.welcome h1{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-1px}
+.welcome h1 em{color:var(--amber);font-style:normal;text-shadow:0 0 28px rgba(245,158,11,.4)}
+.welcome-tagline{color:var(--dim);max-width:400px;font-size:14px;line-height:1.65}
+.welcome-status{display:flex;align-items:center;gap:14px;padding:7px 18px;border-radius:24px;
+  background:var(--glass);border:1px solid var(--border);
+  font-size:10.5px;font-family:var(--mono);color:var(--dim)}
+.ws-dot{width:5px;height:5px;border-radius:50%;background:var(--amber);box-shadow:var(--glow-a)}
+.welcome-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:4px}
+.welcome-chip{padding:8px 15px;border-radius:20px;font-size:12.5px;
+  background:var(--glass);border:1px solid var(--border);
+  color:var(--text);cursor:pointer;font-family:var(--font);transition:all .2s}
+.welcome-chip:hover{border-color:var(--amber);color:var(--amber);
+  box-shadow:var(--glow-a);transform:translateY(-2px)}
+
+/* grade-year welcome stat pills */
+.grade-pills-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.gp{padding:6px 14px;border-radius:20px;font-size:12px;background:var(--glass2);
+  border:1px solid var(--border2);color:var(--text2);cursor:pointer;font-family:var(--font);transition:all .2s}
+.gp:hover,.gp.active{border-color:var(--amber);color:var(--amber)}
+
+/* ══ INPUT ═══════════════════════════════════════════ */
+.input-area{padding:12px 20px 16px;
+  background:linear-gradient(0deg,var(--panel) 0%,var(--deep) 100%);
+  border-top:1px solid var(--border);position:relative}
+.input-area::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--amber),var(--yellow),var(--blue),transparent);opacity:.3}
+.img-preview-row{display:none;align-items:center;gap:8px;padding:7px 11px 4px;
+  background:var(--glass);border-radius:10px 10px 0 0;
+  border:1px solid var(--border);border-bottom:none;
+  font-size:12px;color:var(--dim);margin-bottom:-2px}
+.img-preview-row img{width:36px;height:36px;border-radius:5px;object-fit:cover}
+.remove-img{background:none;border:none;cursor:pointer;color:var(--dimmer);font-size:13px;transition:color .15s}
+.remove-img:hover{color:var(--amber)}
+.input-wrap{display:flex;align-items:flex-end;gap:8px;
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:13px;padding:7px 10px;transition:all .2s;position:relative}
+.input-wrap:focus-within{border-color:rgba(245,158,11,.4);box-shadow:var(--glow-a)}
+.input-icon-btn{width:30px;height:30px;border-radius:7px;
+  background:none;border:none;cursor:pointer;color:var(--dimmer);font-size:15px;
+  display:flex;align-items:center;justify-content:center;transition:all .15s}
+.input-icon-btn:hover{color:var(--amber);background:var(--glass2)}
+#chat-input{flex:1;background:none;border:none;outline:none;color:var(--text);
+  font-family:var(--font);font-size:var(--fs);resize:none;max-height:120px;line-height:1.5;padding:4px 0}
+#chat-input::placeholder{color:var(--dimmer)}
+.send-btn{width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--amber),var(--amber2));
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:#070500;transition:all .2s;flex-shrink:0;font-weight:700}
+.send-btn:hover{box-shadow:0 0 22px rgba(245,158,11,.55);transform:scale(1.06)}
+.input-hint{font-size:10.5px;color:var(--dimmer);margin-top:7px;text-align:center;font-family:var(--mono)}
+
+/* ══ PERFORMANCE PANEL ═══════════════════════════════ */
+.perf-panel{
+  position:fixed;right:-420px;top:0;bottom:0;width:380px;z-index:200;
+  background:linear-gradient(180deg,var(--panel) 0%,var(--deep) 100%);
+  border-left:1px solid var(--border);
+  transition:right .35s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+  box-shadow:-16px 0 60px rgba(0,0,0,.7);
+}
+.perf-panel::before{content:'';position:absolute;top:0;left:0;width:1px;height:100%;
+  background:linear-gradient(180deg,var(--amber),transparent 40%,transparent 60%,var(--blue));opacity:.5}
+.perf-panel.open{right:0}
+.perf-header{padding:18px 22px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.perf-header h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
+  display:flex;align-items:center;gap:8px}
+.perf-header h3::before{content:'';width:3px;height:15px;
+  background:linear-gradient(180deg,var(--amber),var(--blue));border-radius:2px}
+.perf-close{background:none;border:none;color:var(--dim);font-size:18px;cursor:pointer;
+  transition:color .2s;padding:4px}
+.perf-close:hover{color:var(--amber)}
+.perf-body{flex:1;overflow-y:auto;padding:18px 22px;
+  scrollbar-width:thin;scrollbar-color:var(--amber2) transparent}
+
+/* perf stats */
+.perf-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.pstat{background:var(--glass);border:1px solid var(--border);border-radius:12px;
+  padding:12px;text-align:center}
+.pstat-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--amber)}
+.pstat-lbl{font-size:10px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-top:3px}
+.perf-section-hd{font-size:9.5px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dimmer);font-family:var(--mono);margin-bottom:10px;margin-top:16px;
+  display:flex;align-items:center;gap:6px}
+.perf-section-hd::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* topic mastery bars */
+.topic-mastery-item{margin-bottom:10px}
+.tmi-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.tmi-name{font-size:12px;color:var(--text2)}
+.tmi-pct{font-size:11px;font-family:var(--mono);color:var(--dim)}
+.tmi-bar{height:5px;background:var(--glass2);border-radius:5px;overflow:hidden}
+.tmi-fill{height:100%;border-radius:5px;
+  background:linear-gradient(90deg,var(--amber2),var(--amber));transition:width .8s ease}
+.tmi-fill.good{background:linear-gradient(90deg,#16a34a,var(--green))}
+.tmi-fill.warn{background:linear-gradient(90deg,#d97706,var(--amber))}
+.tmi-fill.poor{background:linear-gradient(90deg,#dc2626,var(--red))}
+
+/* activity feed */
+.act-item{display:flex;align-items:center;gap:10px;padding:8px 0;
+  border-bottom:1px solid var(--border)}
+.act-item:last-child{border-bottom:none}
+.act-icon{font-size:16px;flex-shrink:0}
+.act-info{flex:1;min-width:0}
+.act-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.act-sub{font-size:10px;color:var(--dim)}
+.act-score{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  flex-shrink:0;color:var(--amber)}
+.act-score.high{color:var(--green)}.act-score.mid{color:var(--amber)}.act-score.low{color:#f87171}
+
+/* ══ SETTINGS ════════════════════════════════════════ */
+.settings-panel{position:fixed;right:-420px;top:0;bottom:0;width:400px;z-index:300;
+  background:linear-gradient(180deg,var(--panel) 0%,var(--deep) 100%);
+  border-left:1px solid var(--border);transition:right .35s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;box-shadow:-16px 0 60px rgba(0,0,0,.7)}
+.settings-panel::before{content:'';position:absolute;top:0;left:0;width:1px;height:100%;
+  background:linear-gradient(180deg,var(--amber),transparent 40%,transparent 60%,var(--blue));opacity:.5}
+.settings-panel.open{right:0}
+.settings-header{padding:18px 22px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.settings-header h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
+  display:flex;align-items:center;gap:8px}
+.settings-header h3::before{content:'';width:3px;height:15px;
+  background:linear-gradient(180deg,var(--amber),var(--blue));border-radius:2px}
+.settings-body{flex:1;overflow-y:auto;padding:18px 22px}
+.settings-body::-webkit-scrollbar{width:3px}
+.settings-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.setting-group{margin-bottom:22px}
+.setting-group>label{display:block;font-size:9.5px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--dimmer);margin-bottom:10px;font-family:var(--mono)}
+.key-section{background:var(--glass);border:1px solid var(--border);
+  border-radius:11px;padding:14px;position:relative;overflow:hidden}
+.key-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--amber),var(--yellow),var(--blue),transparent);opacity:.45}
+.key-info{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.18);
+  border-radius:7px;padding:9px 11px;font-size:12px;color:var(--dim);margin-bottom:11px;line-height:1.5}
+#groq-key-field{width:100%;padding:9px 11px;border-radius:8px;
+  background:var(--panel2);border:1px solid var(--border);
+  color:var(--text);font-family:var(--mono);font-size:12.5px;outline:none;transition:all .2s}
+#groq-key-field:focus{border-color:rgba(245,158,11,.45);box-shadow:var(--glow-a)}
+.key-save-btn{width:100%;padding:9px;margin-top:9px;border-radius:8px;
+  background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(56,189,248,.1));
+  border:1px solid var(--border2);color:var(--amber);
+  font-weight:700;font-size:13px;cursor:pointer;font-family:var(--font);transition:all .2s}
+.key-save-btn:hover{border-color:var(--amber);box-shadow:var(--glow-a)}
+.key-hint{font-size:10.5px;color:var(--dimmer);margin-top:7px;font-family:var(--mono);text-align:center}
+.key-hint a{color:var(--amber);text-decoration:none}
+.theme-btns{display:flex;gap:8px}
+.theme-btn{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);cursor:pointer;
+  font-size:12px;font-weight:600;transition:all .15s;font-family:var(--font);
+  display:flex;align-items:center;justify-content:center;gap:6px}
+.theme-btn.light{background:#fffbeb;color:#1c0a00}
+.theme-btn.dark{background:#070500;color:#fef3c7}
+.theme-btn.active{border-color:var(--amber);box-shadow:var(--glow-a)}
+
+.backdrop{position:fixed;inset:0;background:rgba(7,5,0,.75);z-index:199;
+  opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px)}
+.backdrop.show{opacity:1;pointer-events:all}
+
+@media(max-width:700px){
+  .sidebar{display:none}.settings-panel{width:100%;right:-100%}
+  .mode-tabs{padding:6px 12px}.messages-wrap{padding:14px}
+}
+</style>
+</head>
+<body>
+<div id="scanline"></div>
+
+<!-- ══ SIDEBAR ══════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <div class="logo-icon-wrap">
+        <svg class="logo-ring-svg" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="url(#lmG)" stroke-width="1" stroke-dasharray="5 3"/>
+          <defs><linearGradient id="lmG" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f59e0b"/><stop offset="1" stop-color="#38bdf8"/>
+          </linearGradient></defs>
+        </svg>
+        <div class="logo-core">🔢</div>
+      </div>
+      <div class="logo-text">Learn<span class="max">Max</span></div>
+    </div>
+    <div class="level-badge"><div class="level-dot"></div>MATHEMATICS</div>
+  </div>
+
+  <a style="margin:6px 16px 0;padding:7px 12px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--dim);font-size:11.5px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px;transition:all .15s;text-decoration:none" href="index.html" onmouseover="this.style.background='var(--glass2)';this.style.color='var(--amber)'" onmouseout="this.style.background='transparent';this.style.color='var(--dim)'">← Back to Hub</a>
+  <button class="new-chat-btn" onclick="newChat()">
+    <div class="plus">+</div> New Session
+  </button>
+
+  <!-- Grade selector -->
+  <div class="grade-section">
+    <div class="section-title">Grade / Year</div>
+    <select class="grade-select" id="grade-select" onchange="onGradeChange(this.value)">
+      <optgroup label="── Primary ──">
+        <option value="G1">Grade 1</option>
+        <option value="G2">Grade 2</option>
+        <option value="G3">Grade 3</option>
+        <option value="G4">Grade 4</option>
+        <option value="G5">Grade 5</option>
+        <option value="G6">Grade 6</option>
+      </optgroup>
+      <optgroup label="── Secondary ──">
+        <option value="F1" selected>Form 1 / Year 7</option>
+        <option value="F2">Form 2 / Year 8</option>
+        <option value="F3">Form 3 / Year 9</option>
+        <option value="F4">Form 4 / Year 10</option>
+        <option value="F5">Form 5 / Year 11</option>
+        <option value="F6">Form 6 / Year 12</option>
+      </optgroup>
+    </select>
+  </div>
+
+  <!-- Topic tree -->
+  <div class="topic-scroll" id="topic-tree"></div>
+
+  <div class="sidebar-bottom">
+    <div class="model-badge" id="model-badge">
+      <div class="level-dot"></div><span>⚡ Groq · Llama-3.3</span>
+    </div>
+    <button class="settings-btn" onclick="openPerf()">📊 &nbsp; My Performance</button>
+    <button class="settings-btn" onclick="openSettings()">⚙️ &nbsp; Settings &amp; API Key</button>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══════════════════════════════════════════ -->
+<div class="main">
+  <div class="chat-header">
+    <div class="bot-avatar">
+      <div class="bot-avatar-ring"></div>
+      <div class="bot-avatar-core">🎓</div>
+      <div class="bot-status"></div>
+    </div>
+    <div>
+      <div class="header-title" id="header-title">Mathematics · All Topics</div>
+      <div class="header-sub" id="header-sub">Select a topic from the sidebar to get guided prompts</div>
+    </div>
+    <div class="header-actions">
+      <div class="hud-pill"><div class="hd"></div><span id="hud-model">GROQ</span></div>
+      <button class="icon-btn" title="Toggle theme" onclick="toggleTheme()">☀️</button>
+      <button class="icon-btn" title="New chat" onclick="newChat()">🔄</button>
+    </div>
+  </div>
+
+  <!-- Mode tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('explain',this)">💡 Explain It</button>
+    <button class="mode-tab" onclick="setMode('solve',this)">🔢 Solve Step-by-Step</button>
+    <button class="mode-tab" onclick="setMode('quiz',this)">🧩 Quiz Me</button>
+    <button class="mode-tab" onclick="setMode('practice',this)">✏️ Practice Problems</button>
+    <button class="mode-tab" onclick="setMode('realworld',this)">🌍 Real-World Use</button>
+    <button class="mode-tab" onclick="setMode('shortcut',this)">⚡ Tricks &amp; Shortcuts</button>
+  </div>
+
+  <!-- Prompt panel — dynamically populated -->
+  <div class="prompt-panel" id="prompt-panel">
+    <div class="prompt-panel-label" id="prompt-panel-label">GUIDED PROMPTS FOR THIS TOPIC</div>
+    <div class="prompt-chips" id="prompt-chips"></div>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages-wrap" id="messages">
+    <div class="welcome" id="welcome-screen">
+      <div class="welcome-orb">
+        <div class="orb-ring1"></div><div class="orb-ring2"></div>
+        <div class="orb-core">🔢</div>
+      </div>
+      <h1>Welcome to <em>Maths</em> 👋</h1>
+      <div class="welcome-status">
+        <div class="ws-dot"></div><span>All Topics Loaded</span>
+        <span>·</span><span>Quiz Mode Ready</span><span>·</span><span>AI Online</span>
+      </div>
+      <p class="welcome-tagline">
+        Pick your grade, click any chapter or topic — and guided prompts appear instantly.<br>
+        Ask anything, get step-by-step solutions, quizzes, and more! 🚀
+      </p>
+      <div class="welcome-chips" id="welcome-chips"></div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area">
+    <div class="img-preview-row" id="img-preview-row">
+      <img id="img-preview-thumb" src="" alt=""/>
+      <span id="img-preview-name"></span>
+      <button class="remove-img" onclick="removeImage()">✕</button>
+    </div>
+    <div class="input-wrap">
+      <label class="input-icon-btn" title="Upload image of problem">
+        📎<input type="file" accept="image/*" style="display:none" onchange="handleImageUpload(event)"/>
+      </label>
+      <textarea id="chat-input" rows="1" placeholder="Ask anything in Maths… or click a guided prompt above 🔢"
+        onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+    <div class="input-hint">Enter to send · Shift+Enter for new line · Upload image of any maths problem</div>
+  </div>
+</div>
+
+<!-- ══ PERFORMANCE PANEL ══════════════════════════════ -->
+<div class="perf-panel" id="perf-panel">
+  <div class="perf-header">
+    <h3>📊 My Performance</h3>
+    <button class="perf-close" onclick="closePerf()">✕</button>
+  </div>
+  <div class="perf-body" id="perf-body"></div>
+</div>
+
+<!-- ══ SETTINGS PANEL ═════════════════════════════════ -->
+<div class="settings-panel" id="settings-panel">
+  <div class="settings-header">
+    <h3>⚙️ Settings</h3>
+    <button class="perf-close" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="settings-body">
+    <div class="setting-group">
+      <label>Groq API Key</label>
+      <div class="key-section">
+        <div class="key-info">Groq is free &amp; fast. Get your key at <strong>console.groq.com</strong> — takes 30 seconds!</div>
+        <input type="password" id="groq-key-field" placeholder="gsk_..." autocomplete="off"/>
+        <button class="key-save-btn" onclick="saveToken()">💾 Save Key</button>
+        <div class="key-hint">Free · Fast · No card needed · <a href="https://console.groq.com" target="_blank">console.groq.com ↗</a></div>
+      </div>
+    </div>
+    <div class="setting-group">
+      <label>Theme</label>
+      <div class="theme-btns">
+        <button id="btn-dark" class="theme-btn dark active" onclick="setTheme('dark')">🌙 Dark</button>
+        <button id="btn-light" class="theme-btn light" onclick="setTheme('light')">☀️ Light</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="backdrop" onclick="closeAll()"></div>
+
+<!-- ══ SCRIPT ═════════════════════════════════════════ -->
+<script>
+// ═══════════════════════════════════════════════════════
+//   LearnMax · Mathematics — Full Engine
+//   Groq API (same pattern as index.html) + Performance DB
+// ═══════════════════════════════════════════════════════
+
+// ── GROQ CONFIG (identical to index.html) ────────────
+let GROQ_KEY = localStorage.getItem('groq_key') || '';
+const GROQ_MODELS = [
+  'llama-3.3-70b-versatile',
+  'llama-3.1-8b-instant',
+  'gemma2-9b-it',
+  'mixtral-8x7b-32768'
+];
+
+// ── STATE ─────────────────────────────────────────────
+let currentGrade   = 'F1';
+let currentChapter = null;
+let currentTopic   = null;
+let currentMode    = 'explain';
+let conversationHistory = [];
+let pendingImage   = null;
+let pendingImageBase64 = null;
+
+// ── PERFORMANCE DB (localStorage) ────────────────────
+//  Structure: { grade: { chapter: { topic: { asks:N, quizCorrect:N, quizTotal:N, lastAsked:ts } } } }
+function getPerf() {
+  return JSON.parse(localStorage.getItem('lmx_math_perf') || '{}');
+}
+function savePerf(p) {
+  localStorage.setItem('lmx_math_perf', JSON.stringify(p));
+}
+function logActivity(grade, chapter, topic, type, score) {
+  const p = getPerf();
+  if (!p[grade]) p[grade] = {};
+  if (!p[grade][chapter]) p[grade][chapter] = {};
+  if (!p[grade][chapter][topic]) p[grade][chapter][topic] = { asks:0, quizCorrect:0, quizTotal:0, lastAsked:null };
+  const t = p[grade][chapter][topic];
+  t.lastAsked = Date.now();
+  if (type === 'ask') t.asks++;
+  if (type === 'quiz') { t.quizTotal++; if (score) t.quizCorrect++; }
+
+  // also log to activity feed
+  const feed = JSON.parse(localStorage.getItem('lmx_math_feed') || '[]');
+  feed.push({ grade, chapter, topic, type, score, ts: Date.now() });
+  if (feed.length > 100) feed.splice(0, feed.length - 100);
+  localStorage.setItem('lmx_math_feed', JSON.stringify(feed));
+  savePerf(p);
+}
+
+// ── FULL SYLLABUS DATA ────────────────────────────────
+// Each chapter → topics → guided prompts (mode-keyed)
+const SYLLABUS = {
+  G1:{
+    label:'Grade 1', color:'#f59e0b',
+    chapters:[
+      { name:'Numbers 1–100', icon:'🔢', topics:[
+        { name:'Counting 1–100', prompts:{
+          explain:['Teach me to count from 1 to 100 with a fun trick','What comes after 49?','Help me count in 2s'],
+          solve:['Count these objects for me: 🍎🍎🍎🍊🍊 how many total?','Fill in the missing numbers: 5, __, 7, __'],
+          quiz:['Quiz me: what number comes before 30?','Give me 5 counting questions'],
+          practice:['Give me a counting worksheet (10 questions)','Practice skip counting by 5s'],
+          realworld:['When do we count in real life?','How do cashiers count money?'],
+          shortcut:['Trick to count large groups quickly','Finger counting method for 1–10']
+        }},
+        { name:'Writing Numbers', prompts:{
+          explain:['Explain how to write the number 7 correctly','Difference between 6 and 9 in writing'],
+          solve:['Write these in words: 14, 25, 30','Write these as digits: twelve, forty'],
+          quiz:['Quiz me on writing numbers 1–20'],
+          practice:['Give me number-writing practice (1–50)'],
+          realworld:['Why is it important to write numbers clearly?'],
+          shortcut:['Memory tip to not confuse 6 and 9']
+        }},
+        { name:'Before, After & Between', prompts:{
+          explain:['Explain what "between" means in numbers','What does "just before" mean?'],
+          solve:['What is between 14 and 16?','What comes just after 99?'],
+          quiz:['Quiz me: 5 before/after questions'],
+          practice:['10 before/after number practice problems'],
+          realworld:['Give a real-life example of "between" numbers'],
+          shortcut:['Quick trick to find numbers before/after']
+        }}
+      ]},
+      { name:'Addition (Basic)', icon:'➕', topics:[
+        { name:'Adding to 10', prompts:{
+          explain:['Explain addition using pictures of apples 🍎','What does the + sign mean?'],
+          solve:['Solve: 3 + 4 = ?  Show me step by step','Solve 2 + 8 ='],
+          quiz:['Quiz me: 10 addition to-10 questions fast'],
+          practice:['Addition to 10 worksheet — 15 problems'],
+          realworld:['Give me 3 real-life addition stories (adding toys, sweets)'],
+          shortcut:['Finger method for adding small numbers']
+        }},
+        { name:'Adding to 20', prompts:{
+          explain:['Teach me adding numbers up to 20','Explain number bonds to 20'],
+          solve:['Solve: 9 + 7 =','Solve: 13 + 5 = ?'],
+          quiz:['5 quick addition-to-20 questions'],
+          practice:['Practice problems: adding to 20'],
+          realworld:['Story problem: I have 8 pencils, get 7 more. Total?'],
+          shortcut:['Make-10 strategy for fast addition']
+        }},
+        { name:'Number Bonds', prompts:{
+          explain:['What are number bonds? Explain with diagrams','Show number bonds for 10'],
+          solve:['Fill the number bond: 7 + ? = 10','Complete: 4 + ? = 9'],
+          quiz:['Quiz me on number bonds to 10'],
+          practice:['Number bond practice sheet'],
+          realworld:['How are number bonds used in shopping?'],
+          shortcut:['Quick way to memorise number bonds to 10']
+        }}
+      ]},
+      { name:'Subtraction (Basic)', icon:'➖', topics:[
+        { name:'Take Away', prompts:{
+          explain:['Explain subtraction using the "take away" idea','What does the − sign mean?'],
+          solve:['Solve: 8 − 3 = ? Step by step','Solve: 10 − 6 ='],
+          quiz:['Quiz me: 8 subtraction take-away problems'],
+          practice:['Give me 12 subtraction problems to practice'],
+          realworld:['I have 9 sweets, eat 4. How many left? Explain.'],
+          shortcut:['Counting-back method for subtraction']
+        }},
+        { name:'Subtraction Word Problems', prompts:{
+          explain:['How to identify subtraction in a word problem','Key words that mean subtract'],
+          solve:['There are 15 birds, 6 fly away. Solve this.','John has 12 books, gives 5. How many remain?'],
+          quiz:['Give me 5 subtraction word problems'],
+          practice:['Word problem worksheet: 8 subtraction stories'],
+          realworld:['3 real-life subtraction situations'],
+          shortcut:['How to spot "subtract" words in any problem']
+        }}
+      ]},
+      { name:'Shapes & Patterns', icon:'🔷', topics:[
+        { name:'2D Shapes', prompts:{
+          explain:['Teach me 2D shapes — circle, square, triangle, rectangle','What makes a shape 2D?'],
+          solve:['How many sides does a hexagon have?','Name the shape with 3 sides'],
+          quiz:['Quiz me on 2D shapes — 8 questions'],
+          practice:['Draw and label 5 different 2D shapes'],
+          realworld:['Where do we see circles/squares in real life?'],
+          shortcut:['Memory rhyme to remember shape names']
+        }},
+        { name:'Patterns', prompts:{
+          explain:['What is a pattern? Explain with examples','Show me ABAB and ABCABC patterns'],
+          solve:['What comes next? 🔴🔵🔴🔵__','Continue: 1, 3, 5, 7, __'],
+          quiz:['5 pattern completion questions'],
+          practice:['Pattern worksheet: complete 10 patterns'],
+          realworld:['Patterns in nature and daily life'],
+          shortcut:['How to spot the "rule" in any pattern quickly']
+        }}
+      ]}
+    ]
+  },
+
+  G2:{label:'Grade 2',color:'#d97706',chapters:[
+    {name:'Numbers to 1000',icon:'🔢',topics:[
+      {name:'Place Value',prompts:{explain:['Explain hundreds, tens and ones with examples','What is the value of 3 in 357?'],solve:['Break 472 into hundreds, tens, ones','What is the place value of 5 in 523?'],quiz:['Quiz me: 8 place value questions'],practice:['Place value worksheet for 3-digit numbers'],realworld:['How do prices use place value?'],shortcut:['The place-value house trick']}},
+      {name:'Ordering Numbers',prompts:{explain:['How to arrange numbers smallest to largest','What does "ascending" mean?'],solve:['Order these: 345, 123, 678, 456','Put in descending order: 88, 12, 56, 100'],quiz:['5 ordering numbers challenges'],practice:['Order 10 sets of 3-digit numbers'],realworld:['Why do we order scores in a competition?'],shortcut:['Quick comparison: always look at highest place value first']}}
+    ]},
+    {name:'Multiplication Intro',icon:'✖️',topics:[
+      {name:'Tables 2 & 5',prompts:{explain:['Teach me the 2 times table with a pattern trick','Show me the 5 times table'],solve:['What is 2 × 7?','Solve: 5 × 4 = ?'],quiz:['Quiz me: full 2× and 5× tables'],practice:['Times table drill: 20 questions'],realworld:['How is multiplication used in buying 5 items each at $2?'],shortcut:['The finger trick for the 5 times table']}},
+      {name:'Repeated Addition',prompts:{explain:['Show how 3+3+3+3 = 3×4','What is repeated addition?'],solve:['Write 6+6+6 as multiplication','Draw an array for 2×5'],quiz:['5 questions: repeated addition to multiplication'],practice:['Convert 8 repeated additions to multiplication'],realworld:['Packets of 4 biscuits — 3 packets, how many?'],shortcut:['Array drawing trick']}}
+    ]}
+  ]},
+
+  G3:{label:'Grade 3',color:'#b45309',chapters:[
+    {name:'Multiplication Tables',icon:'✖️',topics:[
+      {name:'Tables 1–10',prompts:{explain:['Teach me a trick to remember the 7× table','Why is 6×7=42 and not 41?'],solve:['What is 8×9?','Solve 6×7 and explain how'],quiz:['Full times tables quiz: random 20 questions'],practice:['Times tables challenge worksheet'],realworld:['A box has 8 rows of 6 chocolates. Total?'],shortcut:['The 9× finger trick and pattern trick']}},
+      {name:'Division (inverse)',prompts:{explain:['How does multiplication relate to division?','If 4×6=24, what is 24÷6?'],solve:['Solve: 48÷6 using multiplication','If 7×8=56, what is 56÷8?'],quiz:['Division using times tables: 10 questions'],practice:['Division families of facts worksheet'],realworld:['Share 24 sweets among 6 friends — how?'],shortcut:['Fact family triangle trick']}}
+    ]},
+    {name:'Fractions & Decimals',icon:'½',topics:[
+      {name:'Equivalent Fractions',prompts:{explain:['What are equivalent fractions? Show with pizza','Why is 1/2 = 2/4?'],solve:['Find 3 fractions equivalent to 2/3','Simplify 8/12'],quiz:['Quiz: 8 equivalent fraction questions'],practice:['Equivalent fractions worksheet'],realworld:['Cutting a pizza — equivalent fractions in real life'],shortcut:['Multiply/divide top AND bottom by same number']}},
+      {name:'Decimals to 2 places',prompts:{explain:['Explain tenths and hundredths with money examples','What is 0.7 on a number line?'],solve:['Write 3/10 as a decimal','Convert 0.25 to a fraction'],quiz:['8 decimal questions'],practice:['Decimal worksheet — 15 problems'],realworld:['Reading prices: $3.75 explained'],shortcut:['Money shortcut: dollars = whole, cents = decimal']}}
+    ]}
+  ]},
+
+  G4:{label:'Grade 4',color:'#92400e',chapters:[
+    {name:'Algebra Intro',icon:'🔣',topics:[
+      {name:'Variables & Equations',prompts:{explain:['What is a variable? Why use letters?','Explain x + 5 = 12 step by step'],solve:['Solve: x + 7 = 15','Find y: 3y = 21'],quiz:['Quiz: 8 simple algebra equations'],practice:['Algebra practice: 12 one-step equations'],realworld:['Temperature formula C = (F-32)÷1.8 — what does each letter mean?'],shortcut:['Balance method: whatever you do to one side, do to other']}},
+      {name:'Number Patterns',prompts:{explain:['Explain arithmetic patterns with a rule','What is the rule: 3, 7, 11, 15?'],solve:['Find the next 3 terms: 2, 4, 8, 16, __','Write the rule for: 5, 10, 15, 20'],quiz:['Pattern quiz: 10 questions'],practice:['Find rules for 8 number patterns'],realworld:['Patterns in nature: Fibonacci sequence intro'],shortcut:['Difference method to find arithmetic pattern rule']}}
+    ]},
+    {name:'Percentages (intro)',icon:'%',topics:[
+      {name:'Percent Concept',prompts:{explain:['What is a percentage? Explain using 100 squares','How is 50% the same as half?'],solve:['What is 25% of 80?','Convert 3/4 to a percentage'],quiz:['10 percentage concept questions'],practice:['Percentage worksheet: 15 problems'],realworld:['A shirt costs $40. There is a 10% discount. New price?'],shortcut:['Percentage shortcut: % of = × ÷ 100']}}
+    ]}
+  ]},
+
+  G5:{label:'Grade 5',color:'#78350f',chapters:[
+    {name:'Algebra',icon:'🔣',topics:[
+      {name:'Linear Equations',prompts:{explain:['Explain linear equations step by step','What makes an equation "linear"?'],solve:['Solve: 2x + 3 = 11','Solve: 5x − 4 = 16, show every step'],quiz:['Quiz me: 10 linear equation problems'],practice:['15 linear equations practice set'],realworld:['d = speed × time — rearrange to find speed'],shortcut:['The inverse operations shortcut']}},
+      {name:'Inequalities',prompts:{explain:['Explain < > ≤ ≥ with examples on a number line','What is the difference between = and ≥?'],solve:['Solve: 2x + 1 < 9','Find all x where 3x − 2 ≥ 10'],quiz:['Inequalities quiz: 8 questions'],practice:['Inequalities practice sheet'],realworld:['Speed limits as inequalities: v ≤ 60 km/h'],shortcut:['Flip the sign when multiplying/dividing by negative']}}
+    ]},
+    {name:'Statistics',icon:'📊',topics:[
+      {name:'Mean, Median, Mode',prompts:{explain:['Explain mean, median and mode differently — with food examples!','What is the difference between mean and median?'],solve:['Find mean median mode for: 4, 7, 2, 9, 7, 3','What is the mode of: red, blue, red, green, red?'],quiz:['Quiz me: 10 mean/median/mode questions'],practice:['Statistics worksheet: 5 data sets'],realworld:['Why do schools use average (mean) scores?'],shortcut:['Mode = Most, Median = Middle after sorting, Mean = Add÷Count']}},
+      {name:'Bar Graphs & Pie Charts',prompts:{explain:['How to read a bar graph — step by step','How does a pie chart work? Explain with degrees'],solve:['A bar graph shows: Math 8, English 5, Science 7. Which is highest?','If 50% of students like football, what is the angle in a pie chart?'],quiz:['Graph interpretation quiz: 5 questions'],practice:['Draw a bar graph for this data: Mon:4, Tue:7, Wed:3, Thu:9, Fri:6'],realworld:['How are graphs used in news reports?'],shortcut:['Pie chart angle = % × 3.6']}}
+    ]}
+  ]},
+
+  G6:{label:'Grade 6',color:'#6d2800',chapters:[
+    {name:'Coordinate Geometry',icon:'📍',topics:[
+      {name:'Cartesian Plane',prompts:{explain:['Explain the x and y axis clearly','What does the origin (0,0) mean?'],solve:['Plot points: A(2,3), B(-1,4), C(0,-2)','What quadrant is the point (-3, 5) in?'],quiz:['Coordinate plane quiz: 10 questions'],practice:['Plot 10 points on a coordinate grid'],realworld:['How do maps use coordinates?'],shortcut:['Remember: x comes before y — "walk before you climb"']}},
+      {name:'Linear Graphs',prompts:{explain:['How to draw the graph of y = 2x + 1','Explain gradient (slope) with a hill example'],solve:['Draw y = x − 2 for x from -3 to 3','Find the gradient of a line through (1,2) and (3,8)'],quiz:['Linear graph quiz: 8 questions'],practice:['Draw 4 different linear graphs'],realworld:['Phone data cost as a linear graph: cost = 5 + 2×GB'],shortcut:['y = mx + c — m is slope, c is where it crosses y-axis']}}
+    ]},
+    {name:'Probability',icon:'🎲',topics:[
+      {name:'Basic Probability',prompts:{explain:['Explain probability — what does P(event) mean?','What is the probability of getting heads?'],solve:['P(rolling a 6) on a fair die?','A bag has 3 red, 2 blue balls. P(red) = ?'],quiz:['Probability quiz: 10 questions'],practice:['Probability practice: 12 problems'],realworld:['Weather forecasts and probability — how does 70% rain chance work?'],shortcut:['P(event) = favourable ÷ total outcomes']}}
+    ]}
+  ]},
+
+  F1:{label:'Form 1 / Year 7',color:'#f59e0b',chapters:[
+    {name:'Number Systems',icon:'🔢',topics:[
+      {name:'Integers & Number Line',prompts:{explain:['Explain integers — positive, negative and zero with a number line','Why is -5 less than -2?'],solve:['Calculate: -8 + 3','Solve: (-4) × (-6)'],quiz:['Integers quiz: 12 questions with negatives'],practice:['Integer operations: 20 mixed problems'],realworld:['Temperature below zero — real-life negative numbers'],shortcut:['Sign rules: same signs → +, different signs → −']}},
+      {name:'Rational Numbers',prompts:{explain:['What is a rational number? Give 5 examples','Difference between rational and irrational'],solve:['Is √9 rational? Explain','Place 3/4, -1/2, 1.5 on a number line'],quiz:['Rational numbers quiz'],practice:['Classify 10 numbers as rational/irrational'],realworld:['Money, measurements — always rational numbers'],shortcut:['If you can write it as p/q, it is rational']}}
+    ]},
+    {name:'Algebra I',icon:'🔣',topics:[
+      {name:'Expressions & Simplification',prompts:{explain:['What is an algebraic expression? Explain like vs unlike terms','How to simplify 3x + 2y − x + 5y'],solve:['Simplify: 4a + 3b − 2a + b','Expand: 3(2x − 5)'],quiz:['Algebra simplification quiz: 12 questions'],practice:['Simplification practice: 15 expressions'],realworld:['Perimeter formula — simplify P = 2l + 2w'],shortcut:['Collect like terms — sort by variable first']}},
+      {name:'Linear Equations',prompts:{explain:['Step-by-step: how to solve 3x + 7 = 22','What is the "balance method"?'],solve:['Solve: 5x − 3 = 2x + 9','Solve: 2(x+4) = 14'],quiz:['Linear equations quiz: 15 problems'],practice:['Equations practice set A and B'],realworld:['Mobile data problem: 3GB plan + 2 add-ons = 9GB, find add-on size'],shortcut:['Get x alone: undo operations in reverse BIDMAS order']}},
+      {name:'Inequalities',prompts:{explain:['Explain solving inequalities vs equations','Show solution on a number line for x > 3'],solve:['Solve: 4x − 1 ≥ 11','Find x: 2 − 3x < 8'],quiz:['Inequalities quiz: 10 questions'],practice:['Solve and graph 8 inequalities'],realworld:['Height requirement: h ≥ 120 cm to ride — real inequality!'],shortcut:['Flip sign only when × or ÷ by negative']}}
+    ]},
+    {name:'Geometry I',icon:'📐',topics:[
+      {name:"Pythagoras' Theorem",prompts:{explain:["Explain Pythagoras with a clear diagram: a²+b²=c²","Why only works for right-angle triangles?"],solve:['Find hypotenuse: legs are 3 cm and 4 cm','Find missing leg: hyp=13, one leg=5'],quiz:["Pythagoras quiz: 10 problems"],practice:['Pythagoras practice set: 12 questions'],realworld:['TV screen size — diagonal measurement explained'],shortcut:['3-4-5 and 5-12-13 are Pythagorean triples — memorise them!']}},
+      {name:'Angles in Polygons',prompts:{explain:['How to find angles in any polygon — the formula','Interior angle sum of triangle = 180°, why?'],solve:['Find the missing angle in a triangle: 50°, 70°, ?','Sum of interior angles of pentagon?'],quiz:['Angles quiz: 12 questions'],practice:['Angle calculations: 15 shapes'],realworld:['Architecture and angles — why buildings use triangles'],shortcut:['Sum of interior angles = (n−2) × 180 — memorise this!']}}
+    ]},
+    {name:'Statistics I',icon:'📊',topics:[
+      {name:'Mean, Median, Mode, Range',prompts:{explain:['Full explanation of all 4 averages with examples','When do you use median instead of mean?'],solve:['Data: 5,8,3,8,6,2,9. Find all 4 measures','Find mean from frequency table'],quiz:['Statistics quiz: 15 questions'],practice:['3 full data sets — find all averages'],realworld:['Why sports stats use different averages'],shortcut:['Median trick: sort first, then middle(s)']}},
+      {name:'Histograms & Frequency Tables',prompts:{explain:['Difference between bar graph and histogram','How to build a frequency table from raw data'],solve:['Build a frequency table for: 3,4,4,5,3,6,5,4,3,5','Draw histogram for given grouped data'],quiz:['Data representation quiz'],practice:['Complete 3 frequency tables from raw data'],realworld:['How hospitals track patient ages using histograms'],shortcut:['Histogram: x-axis is continuous — no gaps between bars']}}
+    ]}
+  ]},
+
+  F2:{label:'Form 2 / Year 8',color:'#e07b00',chapters:[
+    {name:'Quadratics',icon:'📈',topics:[
+      {name:'Factorisation',prompts:{explain:['Explain factorising quadratics — find two numbers that multiply to c and add to b','Factorise x²+7x+12 step by step'],solve:['Factorise: x²+5x+6','Factorise: x²−9 (difference of squares)'],quiz:['Factorise 10 quadratics'],practice:['Quadratic factorisation worksheet'],realworld:['How quadratics model projectile paths'],shortcut:['Product-sum method: find p×q=c, p+q=b']}},
+      {name:'Quadratic Formula',prompts:{explain:['Explain the quadratic formula and when to use it','Derive the formula by completing the square'],solve:['Solve x²+3x−10=0 using formula','Solve 2x²−5x+2=0'],quiz:['Quadratic formula quiz: 8 problems'],practice:['Solve 10 quadratics using the formula'],realworld:['Ball thrown upward: h = -5t²+20t. When does it land?'],shortcut:['Discriminant b²-4ac: +ve=2 roots, 0=1 root, -ve=no real roots']}},
+      {name:'Completing the Square',prompts:{explain:['What is completing the square? Clear example','Show how it relates to vertex form'],solve:['Complete the square: x²+6x+5','Write y=x²+4x+1 in vertex form'],quiz:['Complete the square: 6 questions'],practice:['Completing the square worksheet'],realworld:['Minimum cost problems using vertex of parabola'],shortcut:['(x + b/2)² − (b/2)² + c — the pattern']}}
+    ]},
+    {name:'Trigonometry I',icon:'📐',topics:[
+      {name:'SOHCAHTOA',prompts:{explain:['Explain SOH CAH TOA with a clear triangle diagram','What are opposite, adjacent, hypotenuse?'],solve:['Find sin(30°), cos(45°), tan(60°)','In a right triangle: hyp=10, angle=35°. Find opposite.'],quiz:['Trig ratios quiz: 12 questions'],practice:['SOHCAHTOA problems: 15 questions'],realworld:['Height of a tree using angle of elevation'],shortcut:['SOH=Sin/Opposite/Hyp, CAH=Cos/Adj/Hyp, TOA=Tan/Opp/Adj']}},
+      {name:'Angles of Elevation & Depression',prompts:{explain:['Explain angle of elevation vs depression with diagrams','How to set up a trig problem from a word problem'],solve:['A 10m ladder leans at 60°. How high up the wall?','From a cliff 50m high, angle of depression to boat is 30°. Distance?'],quiz:['Elevation/depression quiz: 8 real-world problems'],practice:['10 elevation and depression problems'],realworld:['Surveyors, pilots and engineers — real uses'],shortcut:['Draw the triangle FIRST before calculating']}}
+    ]},
+    {name:'Sequences & Series',icon:'🔗',topics:[
+      {name:'Arithmetic Sequences',prompts:{explain:['What is an arithmetic sequence? Explain common difference','Show nth term formula: a + (n-1)d'],solve:['Find 10th term of: 3, 7, 11, 15...','Find n if the nth term of 2,5,8,... is 50'],quiz:['Arithmetic sequences quiz: 10 questions'],practice:['12 arithmetic sequence problems'],realworld:['Salary increasing $200 per year — arithmetic sequence!'],shortcut:['nth term = a + (n-1)d — write it on your formula sheet']}},
+      {name:'Geometric Sequences',prompts:{explain:['Explain geometric sequences and common ratio r','Show nth term formula: ar^(n-1)'],solve:['Find 6th term of: 2, 6, 18, 54...','r = 1/2, a=256. Find the 5th term.'],quiz:['Geometric sequences quiz'],practice:['10 geometric sequence problems'],realworld:['Bacteria doubling every hour — geometric growth!'],shortcut:['To find r: divide any term by the one before it']}}
+    ]},
+    {name:'Matrices',icon:'⬜',topics:[
+      {name:'Matrix Operations',prompts:{explain:['What is a matrix? Explain with a 2×2 example','How to add and subtract matrices — same order rule'],solve:['Add: [[1,2],[3,4]] + [[5,6],[7,8]]','Multiply: [[2,1],[0,3]] × [[1,4],[2,0]]'],quiz:['Matrix operations quiz: 8 problems'],practice:['Matrix arithmetic worksheet'],realworld:['Google PageRank and matrices — how the internet works'],shortcut:['Matrix multiplication: row × column — dot product']}}
+    ]}
+  ]},
+
+  F3:{label:'Form 3 / Year 9',color:'#c05c00',chapters:[
+    {name:'Calculus I',icon:'∫',topics:[
+      {name:'Limits',prompts:{explain:['What is a limit? Explain the concept intuitively','lim x→2 of (x²−4)/(x−2) — evaluate step by step'],solve:['Find: lim x→0 of (sin x)/x','Find: lim x→3 of (x²−9)/(x−3)'],quiz:['Limits quiz: 8 problems'],practice:['Evaluate 10 limits using substitution and factoring'],realworld:['Instantaneous speed — where calculus was born'],shortcut:['Try direct substitution first; factor if 0/0 form']}},
+      {name:'Differentiation',prompts:{explain:['What is a derivative? Explain the slope of a curve idea','Derive power rule: d/dx(xⁿ) = nxⁿ⁻¹'],solve:['Differentiate: f(x) = 3x⁴ − 2x² + 7','Find f′(x) for f(x) = 5x³ − sin(x)'],quiz:['Differentiation quiz: 12 problems'],practice:['Differentiate 15 functions'],realworld:['Speed = derivative of position; acceleration = derivative of speed'],shortcut:['Power rule: bring down the power, reduce it by 1']}},
+      {name:'Applications of Derivatives',prompts:{explain:['How to find max/min using f′(x)=0','Explain increasing/decreasing from sign of derivative'],solve:['Find turning points of y = x³ − 3x','A rectangle with perimeter 20m — maximise area'],quiz:['Optimisation quiz: 6 problems'],practice:['6 max/min real-world problems'],realworld:['Profit maximisation in business using calculus'],shortcut:['Set derivative = 0, solve x, use second derivative to confirm max/min']}}
+    ]},
+    {name:'Vectors',icon:'→',topics:[
+      {name:'Vector Operations',prompts:{explain:['What is a vector vs scalar? Give 5 examples each','How to add vectors geometrically'],solve:['Add vectors a=(3,2) and b=(−1,5)','Find |v| for v = (4,3)'],quiz:['Vector operations quiz: 10 questions'],practice:['Vector arithmetic worksheet: 15 problems'],realworld:['Navigation — planes and ships use vectors daily'],shortcut:['Add components separately: (a₁+b₁, a₂+b₂)']}},
+      {name:'Dot Product',prompts:{explain:['What is the dot product? What does it measure?','Show: a·b = |a||b|cos θ'],solve:['Find a·b for a=(2,3) and b=(4,−1)','Find angle between (1,0) and (1,1)'],quiz:['Dot product quiz'],practice:['8 dot product problems'],realworld:['Work = Force · displacement — physics uses dot product'],shortcut:['Perpendicular vectors always have dot product = 0']}}
+    ]}
+  ]},
+
+  F4:{label:'Form 4 / Year 10',color:'#a04500',chapters:[
+    {name:'Calculus II',icon:'∫',topics:[
+      {name:'Integration',prompts:{explain:['Integration is the reverse of differentiation — explain clearly','Explain the constant of integration C and why it matters'],solve:['Integrate: 4x³ + 2x','Find ∫(3x² − 6x + 2)dx'],quiz:['Integration quiz: 12 problems'],practice:['Integrate 15 functions'],realworld:['Area under velocity-time graph = displacement'],shortcut:['Power rule for integration: add 1 to power, divide by new power']}},
+      {name:'Definite Integrals & Area',prompts:{explain:['Explain definite integral as area under a curve','Difference between definite and indefinite integral'],solve:['Find area under y = x² from x=0 to x=3','Evaluate ∫₁³ (2x+1)dx'],quiz:['Definite integrals quiz'],practice:['Calculate area for 6 different functions'],realworld:['Total distance from speed-time graph'],shortcut:['Definite integral = F(b) − F(a) — Fundamental Theorem']}}
+    ]},
+    {name:'Statistics II',icon:'📊',topics:[
+      {name:'Normal Distribution',prompts:{explain:['Explain the bell curve — what is normal distribution?','What are mean and standard deviation in a normal distribution?'],solve:['Scores are normally distributed, mean=70, sd=10. P(X>80)?','Find z-score for x=85, μ=70, σ=10'],quiz:['Normal distribution quiz: 8 questions'],practice:['Normal distribution problems set'],realworld:['Height, IQ, exam scores — why they are normally distributed'],shortcut:['68-95-99.7 rule: memorise this!']}},
+      {name:'Hypothesis Testing',prompts:{explain:['What is a null hypothesis? Explain H₀ and H₁','Explain p-value in plain English'],solve:['Coin flipped 100 times, heads 60. Is it biased? Test at 5%','Two groups\' test scores: is the difference significant?'],quiz:['Hypothesis testing quiz'],practice:['3 full hypothesis tests'],realworld:['Drug trials — how scientists test if medicine works'],shortcut:['p < 0.05 → reject H₀. Simple rule to remember']}}
+    ]}
+  ]},
+
+  F5:{label:'Form 5 / Year 11',color:'#7c3200',chapters:[
+    {name:'Advanced Calculus',icon:'∫',topics:[
+      {name:'Multivariable Differentiation',prompts:{explain:['What is a partial derivative? Explain ∂f/∂x','Difference between total and partial derivative'],solve:['Find ∂z/∂x for z = 3x²y + 2y³','Find both partial derivatives of f(x,y) = x²+xy+y²'],quiz:['Partial derivatives quiz: 8 problems'],practice:['10 partial differentiation problems'],realworld:['Optimise profit P(x,y) with two products x and y'],shortcut:['∂/∂x: treat y as constant; ∂/∂y: treat x as constant']}}
+    ]},
+    {name:'Linear Algebra',icon:'⬜',topics:[
+      {name:'Eigenvalues & Eigenvectors',prompts:{explain:['What are eigenvalues and eigenvectors — explain intuitively','Show how to find eigenvalues from det(A−λI)=0'],solve:['Find eigenvalues of [[2,1],[1,2]]','Find eigenvectors for the matrix above'],quiz:['Eigenvalue quiz: 4 problems'],practice:['Find eigenvalues and eigenvectors for 3 matrices'],realworld:['Google PageRank algorithm — eigenvectors in action'],shortcut:['Set up characteristic equation, factorise, solve for λ']}}
+    ]}
+  ]},
+
+  F6:{label:'Form 6 / Year 12',color:'#5a2000',chapters:[
+    {name:'University Bridge: Analysis',icon:'∞',topics:[
+      {name:'Real Analysis',prompts:{explain:['What is the epsilon-delta definition of a limit?','Explain Cauchy sequences and convergence'],solve:['Prove lim(1/n) = 0 as n→∞ using ε-δ','Show the sequence (1+1/n)ⁿ converges to e'],quiz:['Real analysis proof quiz'],practice:['3 limit proofs using epsilon-delta'],realworld:['Why rigorous maths is needed in AI and data science'],shortcut:['Work backwards: assume |f(x)-L| < ε, find δ']}},
+      {name:'Number Theory',prompts:{explain:['Explain modular arithmetic with clock analogy','What is Euclids algorithm for GCD?'],solve:['Find GCD(48,18) using Euclids algorithm','Solve: 17x ≡ 3 (mod 5)'],quiz:['Number theory quiz: 10 problems'],practice:['Modular arithmetic problem set'],realworld:['RSA encryption — the maths that secures the internet'],shortcut:['Extended Euclidean Algorithm for modular inverse']}}
+    ]},
+    {name:'University Bridge: Algebra',icon:'⟨⟩',topics:[
+      {name:'Groups & Rings',prompts:{explain:['What is a group in abstract algebra? Give 3 examples','Explain the four group axioms simply'],solve:['Is (Z, +) a group? Verify all axioms','Is (N, ×) a group? Why or why not?'],quiz:['Abstract algebra quiz: 6 proofs'],practice:['Verify group axioms for 4 structures'],realworld:['Symmetry groups in chemistry — molecular structure'],shortcut:['Check CAIN: Closure, Associativity, Identity, Inverse']}}
+    ]}
+  ]}
+};
+
+// ── BUILD TOPIC TREE ──────────────────────────────────
+function buildTree() {
+  const tree = document.getElementById('topic-tree');
+  const data = SYLLABUS[currentGrade];
+  if (!data) return;
+  let html = `<div class="tree-stage">${data.label}</div>`;
+  const perf = getPerf();
+  data.chapters.forEach((ch, ci) => {
+    const chKey = ch.name;
+    const chPerf = perf[currentGrade]?.[chKey] || {};
+    const totalAsks = Object.values(chPerf).reduce((a,t)=>a+(t.asks||0),0);
+    const isActive = currentChapter === chKey;
+    html += `<div class="tree-chapter ${isActive?'active':''}" onclick="selectChapter('${escQ(chKey)}',${ci})">
+      ${ch.icon} ${ch.name}
+      ${totalAsks>0?`<span class="ch-score-badge">${totalAsks} asks</span>`:''}
+    </div>`;
+    if (isActive) {
+      ch.topics.forEach((tp, ti) => {
+        const tpPerf = chPerf[tp.name] || {};
+        const isActiveT = currentTopic === tp.name;
+        const isDone = (tpPerf.asks||0) > 0;
+        html += `<div class="tree-topic ${isActiveT?'active-t':''} ${isDone?'done-t':''}"
+          onclick="selectTopic('${escQ(chKey)}','${escQ(tp.name)}',${ti})">${tp.name}</div>`;
+      });
+    }
+  });
+  tree.innerHTML = html;
+}
+
+function escQ(s){ return s.replace(/'/g,"\\'") }
+
+function selectChapter(chName, ci) {
+  currentChapter = chName;
+  currentTopic = null;
+  document.getElementById('header-title').textContent = `Mathematics · ${chName}`;
+  document.getElementById('header-sub').textContent = `${SYLLABUS[currentGrade].label} — select a topic for guided prompts`;
+  hidePromptPanel();
+  buildTree();
+  updateWelcomeChips();
+}
+
+function selectTopic(chName, topicName, ti) {
+  currentChapter = chName;
+  currentTopic = topicName;
+  document.getElementById('header-title').textContent = topicName;
+  document.getElementById('header-sub').textContent = `${chName} · ${SYLLABUS[currentGrade].label}`;
+  buildTree();
+  showPromptPanel(chName, topicName);
+  logActivity(currentGrade, chName, topicName, 'ask', null);
+  // Auto-inject topic context into next message silently
+  pendingTopicContext = topicName;
+}
+
+let pendingTopicContext = null;
+
+function showPromptPanel(chName, topicName) {
+  const ch = SYLLABUS[currentGrade].chapters.find(c=>c.name===chName);
+  if (!ch) return;
+  const tp = ch.topics.find(t=>t.name===topicName);
+  if (!tp) return;
+  const prompts = tp.prompts[currentMode] || tp.prompts['explain'];
+  const panel = document.getElementById('prompt-panel');
+  const chips = document.getElementById('prompt-chips');
+  document.getElementById('prompt-panel-label').textContent =
+    `GUIDED PROMPTS · ${topicName.toUpperCase()} · ${currentMode.toUpperCase()} MODE`;
+  chips.innerHTML = prompts.map(p =>
+    `<button class="pchip" onclick="sendPrompt('${p.replace(/'/g,"&apos;")}')">${p}</button>`
+  ).join('');
+  panel.classList.add('visible');
+}
+
+function hidePromptPanel() {
+  document.getElementById('prompt-panel').classList.remove('visible');
+}
+
+function sendPrompt(text) {
+  const input = document.getElementById('chat-input');
+  input.value = text;
+  if (currentTopic) logActivity(currentGrade, currentChapter, currentTopic, 'ask', null);
+  sendMessage();
+}
+
+function onGradeChange(grade) {
+  currentGrade = grade;
+  currentChapter = null;
+  currentTopic = null;
+  hidePromptPanel();
+  buildTree();
+  updateWelcomeChips();
+  document.getElementById('header-title').textContent = `Mathematics · ${SYLLABUS[grade]?.label||grade}`;
+  document.getElementById('header-sub').textContent = 'Select a chapter and topic from the sidebar';
+}
+
+// ── WELCOME CHIPS ────────────────────────────────────
+function updateWelcomeChips() {
+  const data = SYLLABUS[currentGrade];
+  if (!data) return;
+  const wc = document.getElementById('welcome-chips');
+  if (!wc) return;
+  const sample = [];
+  data.chapters.slice(0,3).forEach(ch => {
+    ch.topics.slice(0,2).forEach(tp => {
+      const p = tp.prompts.explain?.[0];
+      if (p) sample.push({ label:`${ch.icon} ${tp.name}`, prompt:p });
+    });
+  });
+  wc.innerHTML = sample.slice(0,6).map(s =>
+    `<button class="welcome-chip" onclick="sendPrompt('${s.prompt.replace(/'/g,"&apos;")}')">${s.label}</button>`
+  ).join('');
+}
+
+// ── SYSTEM PROMPT ─────────────────────────────────────
+function buildSystemPrompt() {
+  const gradeData = SYLLABUS[currentGrade];
+  const gradeLabel = gradeData?.label || currentGrade;
+  const modeInstructions = {
+    explain: 'Explain the concept clearly with analogies, diagrams (described), and fun facts. Break it down simply.',
+    solve:   'Show a complete step-by-step worked solution. Number every step. Explain WHY at each step.',
+    quiz:    'Give a quiz with clear numbered questions. After the student answers, provide corrections and explanations.',
+    practice:'Generate a practice problem set (10–15 questions), graded easy→medium→hard. Mark with difficulty stars.',
+    realworld:'Show 2–3 real-world applications with full context. Make it relatable to a student\'s daily life.',
+    shortcut:'Teach the fastest, most memorable tricks, mnemonics, and shortcuts for this topic. Exam-focused.'
+  }[currentMode] || 'Explain clearly.';
+
+  const topicCtx = currentTopic
+    ? `The student is specifically studying: "${currentTopic}" in chapter "${currentChapter}" (${gradeLabel}).`
+    : currentChapter
+    ? `The student is studying the chapter "${currentChapter}" in Mathematics (${gradeLabel}).`
+    : `The student is studying Mathematics at ${gradeLabel} level.`;
+
+  return `You are Max, a brilliant and friendly AI Maths tutor for ${gradeLabel} students.
+
+PERSONALITY:
+- Like that classmate who actually understood maths and loves explaining it — never condescending
+- Use casual, encouraging language with humour: "Okay this part is actually so cool..."
+- Celebrate understanding: "YES! You got it! 🎉"
+- Use emojis sparingly but effectively
+- When confused: "Lemme break this down differently..."
+
+CURRENT CONTEXT: ${topicCtx}
+
+MODE: ${modeInstructions}
+
+ALWAYS:
+- Use **bold** for key terms and formulas
+- Format worked solutions with numbered steps using: <div class="step"><div class="step-num">N</div><div>text</div></div>
+- Include a 💡 fun fact: <div class="fun-fact">💡 Fun fact: text</div>
+- Add a 😄 shortcut or memory trick: <div class="joke-box">⚡ Shortcut: text</div>
+- Use backticks for inline maths: \`x = 5\`
+- Use ## for section headings in long answers
+- Keep paragraphs short (3–4 lines max)
+
+NEVER say "I cannot help with that" for any maths topic. If a topic is advanced, scaffold it — start simple, build up.
+Remember: You are talking to a STUDENT. Be the maths tutor they wished they had!`;
+}
+
+// ── GROQ SEND (identical pattern to index.html) ──────
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text  = input.value.trim();
+  if (!text && !pendingImage) return;
+  hideWelcome();
+
+  const messagesEl = document.getElementById('messages');
+  const userRow = document.createElement('div');
+  userRow.className = 'msg-row user';
+  let bubbleHTML = '';
+  if (pendingImage) bubbleHTML += `<img src="${pendingImage}" alt="uploaded" style="max-width:200px;border-radius:10px;margin-bottom:8px;display:block"/>`;
+  if (text) bubbleHTML += formatText(text);
+  userRow.innerHTML = `<div class="msg-content"><div class="msg-bubble">${bubbleHTML}</div><div class="msg-time">${getTime()}</div></div><div class="msg-avatar user">🙋</div>`;
+  messagesEl.appendChild(userRow);
+
+  const userText = text, imgBase64 = pendingImageBase64;
+  input.value = ''; input.style.height = '';
+  removeImage(); scrollBottom();
+
+  const typingRow = addTyping();
+  try {
+    const reply = await getAIReply(userText, imgBase64);
+    typingRow.remove();
+    addBotMessage(reply);
+    conversationHistory.push({role:'user',content:userText||'[image]'});
+    conversationHistory.push({role:'assistant',content:reply});
+    if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
+    // Check for quiz answer scoring
+    if (currentMode === 'quiz' && currentTopic) {
+      const hasCorrect = /correct|✅|right|well done|yes!/i.test(reply);
+      logActivity(currentGrade, currentChapter||'General', currentTopic||'General', 'quiz', hasCorrect);
+    }
+  } catch(e) {
+    typingRow.remove();
+    addBotMessage(`⚠️ **${e.message}**`, true);
+  }
+}
+
+async function getAIReply(userText, imgBase64) {
+  const sysMsg = buildSystemPrompt();
+  let userMsg = userText || '';
+  if (imgBase64) userMsg += userMsg
+    ? '\n\n(I uploaded an image of a maths problem — please solve it step by step.)'
+    : 'I uploaded an image of a maths problem. Please solve it step by step.';
+
+  const messages = [
+    {role:'system', content:sysMsg},
+    ...conversationHistory.slice(-8),
+    {role:'user', content:userMsg}
+  ];
+
+  if (GROQ_KEY) {
+    for (const model of GROQ_MODELS) {
+      try {
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method:'POST',
+          headers:{'Content-Type':'application/json','Authorization':`Bearer ${GROQ_KEY.trim()}`},
+          body:JSON.stringify({model, messages, max_tokens:1400, temperature:0.72})
+        });
+        let data; try{data=await res.json()}catch(_){data={}}
+        if (res.status===401){GROQ_KEY='';localStorage.removeItem('groq_key');showTokenPrompt();break}
+        if (res.status===429) throw new Error('Rate limit hit — wait a moment and try again 😅');
+        if (!res.ok){console.warn(`[Groq/${model}] ${res.status}`);continue}
+        const reply = data?.choices?.[0]?.message?.content?.trim();
+        if (reply){updateBadge(model,'Groq');return reply}
+      } catch(e){
+        if (e.message.includes('Rate limit')) throw e;
+        console.warn(`[Groq/${model}]`,e.message);
+      }
+    }
+  }
+
+  // Pollinations fallback
+  for (const model of ['openai','mistral','llama']) {
+    try {
+      const qs = new URLSearchParams({model, system:sysMsg.slice(0,400), private:'true'});
+      const url = `https://text.pollinations.ai/${encodeURIComponent(userMsg.slice(0,350))}?${qs}`;
+      const res = await fetch(url);
+      if (res.ok){
+        const reply = (await res.text()).trim();
+        if (reply && reply.length>15){updateBadge(model,'Pollinations');return reply}
+      }
+    } catch(e){console.warn(`[Poll/${model}]`,e.message)}
+  }
+
+  if (!GROQ_KEY) throw new Error('Add your free Groq API key in ⚙️ Settings to unlock full AI power! Get one free at console.groq.com 🚀');
+  throw new Error('Connection issue — check your internet and try again!');
+}
+
+function updateBadge(model, provider) {
+  const b = document.getElementById('model-badge');
+  const h = document.getElementById('hud-model');
+  const s = model.replace('llama-3.3-70b-versatile','Llama-3.3')
+                  .replace('llama-3.1-8b-instant','Llama-3.1')
+                  .replace('gemma2-9b-it','Gemma-2')
+                  .replace('mixtral-8x7b-32768','Mixtral');
+  if (b) b.innerHTML = `<div class="level-dot"></div><span>⚡ ${s} · ${provider}</span>`;
+  if (h) h.textContent = provider.toUpperCase();
+}
+
+// ── BOT MESSAGES ─────────────────────────────────────
+function addBotMessage(text, isError=false) {
+  const el = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg-row bot';
+  const formatted = formatText(text);
+  const chips = isError ? '' : getMathChips(text);
+  row.innerHTML = `
+    <div class="msg-avatar bot">🎓</div>
+    <div class="msg-content">
+      <div class="msg-bubble ${isError?'error-bubble':''}">${formatted}${chips}</div>
+      <div class="msg-time">Max · ${getTime()}</div>
+    </div>`;
+  el.appendChild(row);
+  scrollBottom();
+}
+
+function addTyping() {
+  const el = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg-row bot';
+  row.innerHTML = `<div class="msg-avatar bot">🎓</div><div class="msg-content"><div class="msg-bubble" style="padding:4px 8px"><div class="typing-indicator"><span></span><span></span><span></span></div></div></div>`;
+  el.appendChild(row);
+  scrollBottom();
+  return row;
+}
+
+function getMathChips(text) {
+  const chips = [];
+  if (/equation|solve|algebra|quadratic/i.test(text)) chips.push('🔢 Give me a harder problem','✏️ Step-by-step please');
+  if (/triangle|angle|geometry|pythagoras/i.test(text)) chips.push('📐 Another geometry problem','🧩 Quiz me on this');
+  if (/calculus|derivative|integral|limit/i.test(text)) chips.push('∫ Another calculus problem','⚡ Shortcut trick please');
+  if (/probability|statistics|mean|median/i.test(text)) chips.push('📊 Real-world example','🧩 Quiz me on this');
+  if (!chips.length) chips.push('🤩 Fun fact about this','📝 Give me practice problems','🧩 Quiz me');
+  const topic = currentTopic || 'this maths topic';
+  return `<div class="chips-wrap">${chips.slice(0,3).map(c=>`<button class="chip" onclick="sendPrompt('${c.replace(/'/g,"\\'")} — ${topic}')">${c}</button>`).join('')}</div>`;
+}
+
+// ── FORMAT TEXT (identical to index.html) ────────────
+function formatText(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/^### (.+)$/gm,'<strong style="font-size:15px;display:block;margin:10px 0 4px;color:var(--amber)">$1</strong>')
+    .replace(/^## (.+)$/gm,'<strong style="font-size:16px;display:block;margin:12px 0 6px;color:var(--amber)">$1</strong>')
+    .replace(/^# (.+)$/gm,'<strong style="font-size:18px;display:block;margin:12px 0 6px;color:var(--yellow)">$1</strong>')
+    .replace(/^> (.+)$/gm,'<div class="fun-fact">💡 $1</div>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>.*?<\/li>(\s*<li>.*?<\/li>)*)/gs,'<ul>$1</ul>')
+    .replace(/^\d+\. (.+)$/gm,(m,p1)=>`<div class="step"><div class="step-num">${m.match(/^\d+/)[0]}</div><div>${p1}</div></div>`)
+    .replace(/\n\n/g,'<br><br>')
+    .replace(/\n/g,'<br>');
+}
+
+// ── PERFORMANCE PANEL ─────────────────────────────────
+function openPerf() {
+  renderPerf();
+  document.getElementById('perf-panel').classList.add('open');
+  document.getElementById('backdrop').classList.add('show');
+}
+function closePerf() {
+  document.getElementById('perf-panel').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('show');
+}
+
+function renderPerf() {
+  const perf = getPerf();
+  const feed = JSON.parse(localStorage.getItem('lmx_math_feed') || '[]');
+  const body = document.getElementById('perf-body');
+
+  // Global stats
+  let totalAsks = 0, totalQuiz = 0, totalCorrect = 0, uniqueTopics = new Set();
+  Object.values(perf).forEach(grades =>
+    Object.values(grades).forEach(chapters =>
+      Object.entries(chapters).forEach(([topic, d]) => {
+        totalAsks += d.asks||0;
+        totalQuiz += d.quizTotal||0;
+        totalCorrect += d.quizCorrect||0;
+        if ((d.asks||0)>0) uniqueTopics.add(topic);
+      })
+    )
+  );
+  const quizAcc = totalQuiz > 0 ? Math.round(totalCorrect/totalQuiz*100) : null;
+
+  // Current grade topic mastery
+  const gradePerf = perf[currentGrade] || {};
+  const gradeData = SYLLABUS[currentGrade];
+  const allTopics = [];
+  gradeData?.chapters.forEach(ch => {
+    ch.topics.forEach(tp => {
+      const d = gradePerf[ch.name]?.[tp.name] || {asks:0};
+      allTopics.push({ name:tp.name, chapter:ch.name, asks:d.asks||0, quizT:d.quizTotal||0, quizC:d.quizCorrect||0 });
+    });
+  });
+  const studiedTopics = allTopics.filter(t=>t.asks>0).sort((a,b)=>b.asks-a.asks);
+
+  // Activity feed
+  const recent = feed.slice(-10).reverse();
+
+  let html = `
+  <div class="perf-stats">
+    <div class="pstat"><div class="pstat-val">${totalAsks}</div><div class="pstat-lbl">Total Asks</div></div>
+    <div class="pstat"><div class="pstat-val">${uniqueTopics.size}</div><div class="pstat-lbl">Topics Explored</div></div>
+    <div class="pstat"><div class="pstat-val">${quizAcc !== null ? quizAcc+'%' : '—'}</div><div class="pstat-lbl">Quiz Accuracy</div></div>
+    <div class="pstat"><div class="pstat-val">${totalQuiz}</div><div class="pstat-lbl">Quiz Attempts</div></div>
+  </div>`;
+
+  if (studiedTopics.length) {
+    html += `<div class="perf-section-hd">${gradeData?.label} Topic Mastery</div>`;
+    studiedTopics.slice(0,12).forEach(t => {
+      const maxAsks = Math.max(...studiedTopics.map(x=>x.asks), 1);
+      const pct = Math.min(100, Math.round(t.asks/maxAsks*100));
+      const cls = pct > 60 ? 'good' : pct > 30 ? 'warn' : 'poor';
+      html += `<div class="topic-mastery-item">
+        <div class="tmi-top"><span class="tmi-name">${t.name}</span><span class="tmi-pct">${t.asks} asks</span></div>
+        <div class="tmi-bar"><div class="tmi-fill ${cls}" style="width:${pct}%"></div></div>
+      </div>`;
+    });
+  } else {
+    html += `<div style="color:var(--dim);font-size:13px;text-align:center;padding:20px 0">No activity yet — start exploring topics! 🚀</div>`;
+  }
+
+  if (recent.length) {
+    html += `<div class="perf-section-hd">Recent Activity</div>`;
+    recent.forEach(a => {
+      const d = new Date(a.ts).toLocaleDateString();
+      const scoreLabel = a.type==='quiz' ? (a.score ? '✅' : '❌') : '💬';
+      html += `<div class="act-item">
+        <div class="act-icon">${scoreLabel}</div>
+        <div class="act-info">
+          <div class="act-name">${a.topic||a.chapter}</div>
+          <div class="act-sub">${a.grade} · ${a.type} · ${d}</div>
+        </div>
+      </div>`;
+    });
+  }
+
+  body.innerHTML = html;
+}
+
+// ── IMAGE UPLOAD ─────────────────────────────────────
+function handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    pendingImage = e.target.result;
+    pendingImageBase64 = e.target.result;
+    document.getElementById('img-preview-row').style.display='flex';
+    document.getElementById('img-preview-thumb').src = pendingImage;
+    document.getElementById('img-preview-name').textContent = file.name;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+function removeImage(){
+  pendingImage=null;pendingImageBase64=null;
+  document.getElementById('img-preview-row').style.display='none';
+}
+
+// ── SETTINGS ─────────────────────────────────────────
+function openSettings(){
+  document.getElementById('settings-panel').classList.add('open');
+  document.getElementById('backdrop').classList.add('show');
+  const isDark = document.documentElement.getAttribute('data-theme')==='dark';
+  document.getElementById('btn-dark').classList.toggle('active',isDark);
+  document.getElementById('btn-light').classList.toggle('active',!isDark);
+}
+function closeSettings(){
+  document.getElementById('settings-panel').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('show');
+}
+function closeAll(){
+  closeSettings();closePerf();
+}
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('btn-dark').classList.toggle('active',t==='dark');
+  document.getElementById('btn-light').classList.toggle('active',t==='light');
+  document.querySelector('.icon-btn[title="Toggle theme"]').textContent = t==='dark'?'☀️':'🌙';
+}
+function toggleTheme(){
+  const c=document.documentElement.getAttribute('data-theme');
+  setTheme(c==='dark'?'light':'dark');
+}
+function showTokenPrompt(){
+  openSettings();
+  setTimeout(()=>{
+    const el=document.getElementById('groq-key-field');
+    if(el){el.focus();el.select();el.style.borderColor='#ef4444';
+      setTimeout(()=>{el.style.borderColor=''},3000)}
+  },350);
+}
+function saveToken(){
+  const el=document.getElementById('groq-key-field');
+  const val=el?.value?.trim();
+  if(val&&val.startsWith('gsk_')){
+    GROQ_KEY=val;localStorage.setItem('groq_key',val);
+    el.style.borderColor='#f59e0b';
+    setTimeout(()=>{el.style.borderColor=''},2000);
+    closeSettings();
+    addBotMessage('✅ **API key saved!** Groq is fully loaded — Llama 3.3-70B is ready! Ask me any maths question 🔢🚀');
+  } else if(val){
+    el.style.borderColor='#ef4444';
+    setTimeout(()=>{el.style.borderColor=''},2000);
+    addBotMessage('⚠️ That key doesn\'t look right — Groq keys start with **gsk_** — double check it! Get one free at **console.groq.com** 😅',true);
+  } else {
+    closeSettings();
+    addBotMessage('No key? Running on backup engine (Pollinations). For full AI power, grab a free Groq key at **console.groq.com** — takes 30 seconds! ⚡');
+  }
+}
+
+// ── MODE CHANGE ──────────────────────────────────────
+function setMode(mode, btn) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  // Refresh prompt chips if topic is selected
+  if (currentTopic && currentChapter) showPromptPanel(currentChapter, currentTopic);
+}
+
+// ── HELPERS ──────────────────────────────────────────
+function newChat(){
+  conversationHistory=[];
+  const el=document.getElementById('messages');
+  el.innerHTML='';
+  const w=document.createElement('div');
+  w.id='welcome-screen';w.className='welcome';
+  w.innerHTML=`
+    <div class="welcome-orb"><div class="orb-ring1"></div><div class="orb-ring2"></div><div class="orb-core">🔢</div></div>
+    <h1>Ready to do <em>Maths</em>? 🔢</h1>
+    <div class="welcome-status"><div class="ws-dot"></div><span>All Topics Loaded</span><span>·</span><span>AI Online</span></div>
+    <p class="welcome-tagline">Pick your grade, click any topic, and guided prompts appear instantly!</p>
+    <div class="welcome-chips" id="welcome-chips"></div>`;
+  el.appendChild(w);
+  updateWelcomeChips();
+  currentChapter=null;currentTopic=null;
+  hidePromptPanel();buildTree();
+}
+
+function hideWelcome(){ const w=document.getElementById('welcome-screen'); if(w) w.remove(); }
+function getTime(){ return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) }
+function scrollBottom(){ const m=document.getElementById('messages');setTimeout(()=>m.scrollTop=m.scrollHeight,50) }
+function handleKey(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()} }
+function autoResize(el){ el.style.height=''; el.style.height=Math.min(el.scrollHeight,120)+'px' }
+
+// ── INIT ─────────────────────────────────────────────
+const _sk = localStorage.getItem('groq_key');
+if (_sk) { GROQ_KEY = _sk; const kf=document.getElementById('groq-key-field'); if(kf) kf.value=_sk; }
+buildTree();
+updateWelcomeChips();
+</script>
+</body>
+</html>
